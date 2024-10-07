@@ -35,9 +35,7 @@ const escribirDatos = (datos) => {
     }
 }
 
-app.listen(port, () => {
-    console.log(`Servidor corriendo en puerto ${port}`)
-});
+
 
 app.get('/productos', (req, res) => {
    // res.send('Listado de productos')
@@ -99,5 +97,9 @@ app.delete('/productos/:id', (req, res) => {
         indice++
     })
     escribirDatos(datos)
-    res.json({"Mensaje":"Producto Eliminado"})
+    res.json({"Mensaje":"Producto Eliminado"}) 
 })
+
+app.listen(port, () => {
+    console.log(`Servidor corriendo en puerto ${port}`)
+});
