@@ -62,8 +62,7 @@ app.post('/productos', (req, res) => {
     nuevoProducto = { id: datos.productos.length + 1, ...req.body }     //Genera un ID y agrega una copia de req.body
     datos.productos.push(nuevoProducto)
     escribirDatos(datos);
-    res.json({"mensaje":'Nuevo producto agregado',
-            producto: nuevoProducto});
+    res.json({"mensaje":'Nuevo producto agregado'});
     })
 
 
