@@ -1,55 +1,91 @@
 const endpoint = 'http://localhost:3000/productos'
-
+mostrarMensaje = (mensaje) => {
+  document.querySelector('#contMensaje').innerHTML = mensaje
+}
 // Event listener para el botón "Añadir Producto"
 document.getElementById('añadir').addEventListener('click', function () {
   const formulario = document.getElementById('prodNuevo');
   formulario.classList.toggle('new');
 });
 
-fetch(endpoint)
-  .then(respuesta => respuesta.json())
-  .then(datos => mostrarProductos(datos))
+// fetch(endpoint)
+//   .then(respuesta => respuesta.json())
+//   .then(datos => mostrarProductos(datos))
+let productos = ''
+const contenedor = document.querySelector('#contProducAdmin')
 
-const mostrarProductos = (datos) => {
-  let productos = ''
-  const contenedor = document.querySelector('#contProducAdmin')
-  datos.forEach(datos => {
-    productos +=
-      `<div class="card border border-1 border-dark d-flex flex-column align-items-center"
-            style="width: 100%; max-width: 300px; margin:30px">
-            <img src="${datos.imagen}" class="card-img-top" alt="...">
-            <div class="card-body ">
-                <h4>${datos.titulo}</h4>
-                <p class="card-text ">${datos.descripcion}</p>
-            </div>
-<div class="d-flex justify-content-between align-items-center w-100 mb-2 px-2">
-  <p class="card-text border border-secondary rounded p-2 mb-0">
-    <strong>${datos.precio}</strong>
-  </p>
-  <div class="d-flex ms-auto">
-    <a href="#prodEditar" class="btn btn-outline-warning me-2 edit">
-      <i class="bi bi-pencil"></i>
-    </a>
-    <a onclick="eliminar(${datos.id})" class="btn btn-outline-danger" type="submit">
-      <i class="bi bi-trash"></i>
-    </a>
-  </div>
-</div>
+const obtenerDatos = async () => {
 
+  try {
 
-        </div>`
-  })
-  contenedor.innerHTML = productos
+    const respuesta = await fetch(endpoint)
+    productosRecibidos = await respuesta.json()
+    productosRecibidos.forEach(datos => {
+      productos +=
+        `<div class="card border border-1 border-dark d-flex flex-column align-items-center"
+                style="width: 100%; max-width: 300px; margin:30px">
+                <img src="${datos.imagen}" class="card-img-top" alt="...">
+                <div class="card-body ">
+                    <h4>${datos.titulo}</h4>
+                    <p class="card-text ">${datos.descripcion}</p>
+                </div>
+    <div class="d-flex justify-content-between align-items-center w-100 mb-2 px-2">
+      <p class="card-text border border-secondary rounded p-2 mb-0">
+        <strong>${datos.precio}</strong>
+      </p>
+      <div class="d-flex ms-auto">
+        <a onclick="editar(${datos.id})" href="#prodEditar" class="btn btn-outline-warning me-2 edit">
+          <i class="bi bi-pencil"></i>
+        </a>
+        <a onclick="eliminar(${datos.id})" class="btn btn-outline-danger" type="submit">
+          <i class="bi bi-trash"></i>
+        </a>
+      </div>
+    </div>
+    
+    
+            </div>`
+    })
+    contenedor.innerHTML = productos
+  } catch (error) {
+    mostrarMensaje('Error al cargar productos')
+  }
 
-  // Añadir event listeners a los botones "Editar"
-  const editButtons = document.querySelectorAll('.edit');
-  editButtons.forEach(button => {
-    button.addEventListener('click', function () {
-      const formulario = document.getElementById('prodEditar');
-      formulario.classList.toggle('newE');
-    });
-  });
 }
+
+obtenerDatos();
+
+//   datos.forEach(datos => {
+//     productos +=
+//       `<div class="card border border-1 border-dark d-flex flex-column align-items-center"
+//             style="width: 100%; max-width: 300px; margin:30px">
+//             <img src="${datos.imagen}" class="card-img-top" alt="...">
+//             <div class="card-body ">
+//                 <h4>${datos.titulo}</h4>
+//                 <p class="card-text ">${datos.descripcion}</p>
+//             </div>
+// <div class="d-flex justify-content-between align-items-center w-100 mb-2 px-2">
+//   <p class="card-text border border-secondary rounded p-2 mb-0">
+//     <strong>${datos.precio}</strong>
+//   </p>
+//   <div class="d-flex ms-auto">
+//     <a onclick="editar(${datos.id})" href="#prodEditar" class="btn btn-outline-warning me-2 edit">
+//       <i class="bi bi-pencil"></i>
+//     </a>
+//     <a onclick="eliminar(${datos.id})" class="btn btn-outline-danger" type="submit">
+//       <i class="bi bi-trash"></i>
+//     </a>
+//   </div>
+// </div>
+
+
+//         </div>`
+//   })
+//   contenedor.innerHTML = productos
+
+// Añadir event listeners a los botones "Editar"
+
+
 
 const formulario = document.forms['formAñadir']
 console.log(formulario)
@@ -80,11 +116,11 @@ formulario.addEventListener('submit', (event) => {
 
   let nuevosDatosJson = JSON.stringify(newDatos)
   console.log(nuevosDatosJson)
-  const enviarNewProducto = async() =>{ //enviar datos al back
-    try{
+  const enviarNewProducto = async () => { //enviar datos al back
+    try {
       const enviarDatos = await fetch(endpoint, {
         method: 'post',
-        headers: { 
+        headers: {
           'content-type': 'application/json'
         },
         body: nuevosDatosJson
@@ -93,45 +129,65 @@ formulario.addEventListener('submit', (event) => {
       const respuesta = await enviarDatos.json()
       console.log(respuesta)
       //limpiar formulario
-     // document.querySelector('#formAñadir').reset()
+      // document.querySelector('#formAñadir').reset()
 
-      document.querySelector('#formAñadir').style.display='none'
+      document.querySelector('#formAñadir').style.display = 'none'
       mostrarMensaje(respuesta.mensaje)
-      setTimeout(()=>{location.reload();}, 5000)
+      setTimeout(() => { location.reload(); }, 2000)
     }
-    catch(error){
+    catch (error) {
       console.log(error)
     }
   }
   enviarNewProducto()
 
-  mostrarMensaje=(mensaje)=>{
-    document.querySelector('#contMensaje').innerHTML = mensaje
-  }
+
 })
 
 
 //Eliminar Producto
-const eliminar = (id)=>{
-  console.log("eliminar id: "+id)
-  console.log(endpoint+'/'+ id)
+const eliminar = (id) => {
+  if (confirm('Seguro desea eliminar?')) {
+    console.log("eliminar id: " + id)
+    console.log(endpoint + '/' + id)
 
-  //enviamos datos al backend
+    //enviamos datos al backend
 
 
-const eliminarProd = async()=>{
-  try{
-    const res = await fetch (endpoint+'/'+id,{
-      method: 'delete'
-    })
-    //obtengo respuesta del backend
-    const respuesta = await res.json
-    //mostrar mensaje de producto eliminado
-    mostrarMensaje(respuesta.mensaje)
-  }catch{
-    mostrarMensaje('Error al borrar')
+    const eliminarProd = async () => {
+
+      try {
+        const res = await fetch(endpoint + '/' + id, {
+          method: 'delete'
+        })
+        //obtengo respuesta del backend
+        const respuesta = await res.json()
+        console.log(respuesta)
+        //mostrar mensaje de producto eliminado
+        mostrarMensaje(respuesta.Mensaje)
+      } catch {
+        mostrarMensaje('Error al borrar')
+
+      }
+      setTimeout(() => { location.reload(); }, 2000) //Refresco pantalla
+
+    }
+    eliminarProd()
   }
-  eliminarProd()
+
 }
 
+const editar = (id) => {
+  const formulario = document.getElementById('prodEditar');
+  formulario.classList.toggle('newE');
+  console.log(id)
+  //Contenedor de datos del producto
+  let prodEditar = {}
+  productosRecibidos.filter(prod => {
+    if (prod.id == id) {
+      prodEditar = prod
+      console.log(prodEditar)
+    }
+  })
+  //asigno los valores a los campos del formulario
 }
