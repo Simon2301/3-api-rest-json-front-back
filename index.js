@@ -16,7 +16,7 @@ app.use(cors())
 
 const leerDatos = () => {
     try {   //intenta convertir cadena, si no funciona nos muestra por consol el error (catch)
-        const datos = fs.readFileSync('./data/datos.json')
+        const datos = fs.readFileSync('./public/data/datos.json')
 
         return JSON.parse(datos); // Convierte una cadena JSON en un objeto JavaScript
         // console.log(JSON.parse(datos)) probar si funciona y despues llamar funcion
@@ -27,7 +27,7 @@ const leerDatos = () => {
 //leerDatos()
 const escribirDatos = (datos) => {
     try {
-        fs.writeFileSync('./data/datos.json', JSON.stringify(datos)) //writeFile permite escribir datos || JSON.stringify convierte un objeto JS en JSON
+        fs.writeFileSync('./public/data/datos.json', JSON.stringify(datos)) //writeFile permite escribir datos || JSON.stringify convierte un objeto JS en JSON
 
     } catch (error) {
         console.log(error)

@@ -196,10 +196,7 @@ const eliminar = (id) => {
 //   formEditar.titulo.value = prodEditar.titulo
 //   formEditar.descripcion.value = prodEditar.descripcion
 //   formEditar.precio.value = prodEditar.precio
-
-
 // }
-
 
 // formEditar.addEventListener('submit', (event) => {
 //   event.preventDefault();
@@ -251,7 +248,7 @@ const editar = (id) => {
   const formulario = document.getElementById('prodEditar');
   formulario.classList.toggle('newE');
   console.log(id);
-  
+
   // Contenedor de datos del producto
   let prodEditar = {};
   productosRecibidos.filter(prod => {
