@@ -1,4 +1,4 @@
-const endpoint = 'http://localhost:3000/productos'
+const endpoint = 'https://tiendaonline-tl5r.onrender.com/productos'
 mostrarMensaje = (mensaje) => {
   document.querySelector('#contMensaje').innerHTML = mensaje
 }
